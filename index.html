@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>넥라인 탐구 교실</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    body { font-family: 'Noto Sans KR', sans-serif; }
+    .tab-btn.active { background: #4f46e5; color: #fff; border-color: #4f46e5; }
+    .photo-box { position: relative; overflow: hidden; background: #e2e8f0; }
+    .photo-box img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; display: block; }
+    .photo-box .fallback { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; text-align: center; font-size: 11px; color: #64748b; padding: 8px; }
+    .photo-box.failed img { display: none; }
+    .photo-box.failed .fallback { display: flex; }
+    .credit { font-size: 9.5px; line-height: 1.3; color: #94a3b8; }
+    .credit a { text-decoration: underline; }
+    .quiz-opt.correct { background: #d1fae5; border-color: #10b981; color: #065f46; }
+    .quiz-opt.wrong { background: #ffe4e6; border-color: #f43f5e; color: #9f1239; }
+    .face-card.active { border-color: #4f46e5; background: #eef2ff; }
+    .neck-chip.active { border-color: #0ea5e9; background: #f0f9ff; color: #0369a1; border-width: 2px; }
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+    @media print { header, .no-print { display: none !important; } }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen">
+
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-40">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-sky-500 via-indigo-500 to-rose-400 flex items-center justify-center text-white shadow-md">
+          <i class="fa-solid fa-shirt"></i>
+        </div>
+        <div>
+          <h1 class="text-base sm:text-lg font-black text-slate-900">넥라인 탐구 교실</h1>
+          <p class="text-[11px] text-slate-500">실제 사진으로 배우는 선(Line)과 착시의 디자인</p>
+        </div>
+      </div>
+      <nav class="flex gap-1.5 overflow-x-auto pb-1 -mx-1 px-1" id="tabs">
+        <button class="tab-btn active whitespace-nowrap px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-bold" data-tab="principle">① 선의 원리</button>
+        <button class="tab-btn whitespace-nowrap px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-bold" data-tab="gallery">② 넥라인 도감</button>
+        <button class="tab-btn whitespace-nowrap px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-bold" data-tab="faces">③ 얼굴형 매칭</button>
+        <button class="tab-btn whitespace-nowrap px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-bold" data-tab="quiz">④ 사진 퀴즈</button>
+        <button class="tab-btn whitespace-nowrap px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-bold" data-tab="fitting">⑤ 나의 피팅룸</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto p-4 sm:p-6 space-y-6">
+
+    <!-- ========== ① 선의 원리 ========== -->
+    <section id="tab-principle" class="tab-panel space-y-6">
+      <div class="bg-gradient-to-r from-sky-500 via-indigo-600 to-purple-600 rounded-3xl p-5 sm:p-6 text-white shadow-lg">
+        <span class="inline-block bg-white/20 px-3 py-1 rounded-full text-xs font-semibold mb-2">오늘의 질문</span>
+        <h2 class="text-xl sm:text-2xl font-black leading-snug">옷의 목둘레 선 하나가 왜 얼굴을 다르게 보이게 할까?</h2>
+        <p class="text-xs sm:text-sm text-sky-100 mt-2 leading-relaxed">
+          우리 눈은 <strong class="text-white">선을 따라 움직입니다.</strong> 넥라인(neckline)은 얼굴 바로 아래에 있는 선이라서,
+          그 선이 세로인지 가로인지, 곡선인지 직선인지에 따라 얼굴이 길어 보이거나, 넓어 보이거나, 부드러워 보이기도 해요.
+          세상에 정답인 얼굴형은 없어요. 단점을 가리는 게 아니라 <strong class="text-white">내가 원하는 느낌을 선으로 디자인</strong>하는 거예요.
+        </p>
+      </div>
+
+      <div>
+        <h3 class="font-black text-slate-900 text-base mb-1 flex items-center gap-2"><i class="fa-solid fa-eye text-sky-500"></i> 선이 시선을 움직이는 4가지 방법</h3>
+        <p class="text-xs text-slate-500 mb-3">사진 속 화살표 그림을 보고, 실제 사진에서 눈이 어느 방향으로 움직이는지 느껴 보세요.</p>
+        <div id="principle-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"></div>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-3xl p-5">
+        <h3 class="font-black text-slate-900 text-base mb-3 flex items-center gap-2"><i class="fa-solid fa-scale-balanced text-indigo-500"></i> 디자인의 2대 법칙 : 대비 vs 반복</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="p-4 rounded-2xl border border-sky-100 bg-sky-50/50 text-center">
+            <span class="text-[11px] font-bold text-sky-700 bg-white px-2 py-0.5 rounded-full">대비 (서로 다른 선) → 보완</span>
+            <svg viewBox="0 0 160 120" class="w-36 h-28 mx-auto my-2">
+              <circle cx="80" cy="42" r="32" fill="#fde68a" stroke="#d97706" stroke-width="2"/>
+              <circle cx="70" cy="40" r="2.5" fill="#78350f"/><circle cx="90" cy="40" r="2.5" fill="#78350f"/>
+              <path d="M 75 52 Q 80 56 85 52" stroke="#78350f" stroke-width="1.5" fill="none"/>
+              <path d="M 45 76 L 80 112 L 115 76" stroke="#0284c7" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+            </svg>
+            <p class="text-xs font-bold text-slate-800">둥근 얼굴 + 뾰족한 V넥</p>
+            <p class="text-[11px] text-slate-500 mt-1 leading-snug">곡선과 직선이 서로 달라서 얼굴의 둥근 느낌이 줄고, 세로로 시원해 보여요.</p>
+          </div>
+          <div class="p-4 rounded-2xl border border-rose-100 bg-rose-50/50 text-center">
+            <span class="text-[11px] font-bold text-rose-700 bg-white px-2 py-0.5 rounded-full">반복 (비슷한 선) → 강조</span>
+            <svg viewBox="0 0 160 120" class="w-36 h-28 mx-auto my-2">
+              <rect x="52" y="12" width="56" height="58" rx="8" fill="#fed7aa" stroke="#c2410c" stroke-width="2"/>
+              <circle cx="70" cy="38" r="2.5" fill="#7c2d12"/><circle cx="90" cy="38" r="2.5" fill="#7c2d12"/>
+              <line x1="75" y1="52" x2="85" y2="52" stroke="#7c2d12" stroke-width="1.5"/>
+              <path d="M 58 78 L 58 108 L 102 108 L 102 78" stroke="#e11d48" stroke-width="3.5" fill="none" stroke-linejoin="round"/>
+            </svg>
+            <p class="text-xs font-bold text-slate-800">각진 얼굴 + 각진 스퀘어넥</p>
+            <p class="text-[11px] text-slate-500 mt-1 leading-snug">비슷한 각이 되풀이되어 또렷한 턱선이 더 강조돼요. 개성을 살리고 싶을 땐 일부러 반복을 써요!</p>
+          </div>
+        </div>
+        <div class="mt-4 p-3 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900 leading-relaxed">
+          <strong>✏️ 생각해보기:</strong> ‘반복’은 나쁜 걸까요? 내 얼굴의 특징을 <u>더 살리고 싶을 때</u>는 반복을, <u>균형을 맞추고 싶을 때</u>는 대비를 고르면 돼요. 선택은 디자이너인 나의 몫!
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== ② 넥라인 도감 ========== -->
+    <section id="tab-gallery" class="tab-panel hidden space-y-4">
+      <div>
+        <h2 class="font-black text-slate-900 text-lg flex items-center gap-2"><i class="fa-solid fa-book-open text-indigo-500"></i> 넥라인 도감</h2>
+        <p class="text-xs text-slate-500 mt-1">실제 사람이 입은 사진과 선 그림을 비교해 보세요. 카드를 누르면 사진을 크게 보고 다른 예시도 볼 수 있어요.</p>
+      </div>
+      <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+    </section>
+
+    <!-- ========== ③ 얼굴형 매칭 ========== -->
+    <section id="tab-faces" class="tab-panel hidden space-y-4">
+      <div>
+        <h2 class="font-black text-slate-900 text-lg flex items-center gap-2"><i class="fa-solid fa-face-smile text-amber-500"></i> 얼굴형 × 넥라인 매칭</h2>
+        <p class="text-xs text-slate-500 mt-1">얼굴형을 고르면 ‘대비’로 균형을 맞춰 주는 넥라인과, ‘반복’ 때문에 특징이 더 강조되는 넥라인을 실제 사진으로 보여 줘요.</p>
+      </div>
+      <div id="face-grid" class="grid grid-cols-3 sm:grid-cols-5 gap-2"></div>
+      <div id="face-detail" class="bg-white border border-slate-200 rounded-3xl p-5"></div>
+      <p class="text-[11px] text-slate-400">※ 사진 속 인물들의 얼굴형을 판단한 것이 아니라, 각 넥라인의 <strong>모양</strong>을 보여 주는 예시 사진입니다.</p>
+    </section>
+
+    <!-- ========== ④ 사진 퀴즈 ========== -->
+    <section id="tab-quiz" class="tab-panel hidden">
+      <div class="max-w-xl mx-auto bg-white border border-slate-200 rounded-3xl p-5 sm:p-6">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="font-black text-slate-900 text-lg flex items-center gap-2"><i class="fa-solid fa-circle-question text-rose-500"></i> 이 넥라인의 이름은?</h2>
+          <span id="quiz-progress" class="text-xs font-bold bg-slate-100 px-2.5 py-1 rounded-full">1 / 10</span>
+        </div>
+        <div id="quiz-body"></div>
+      </div>
+    </section>
+
+    <!-- ========== ⑤ 나의 피팅룸 ========== -->
+    <section id="tab-fitting" class="tab-panel hidden space-y-4">
+      <div>
+        <h2 class="font-black text-slate-900 text-lg flex items-center gap-2"><i class="fa-solid fa-wand-magic-sparkles text-sky-500"></i> 나의 넥라인 피팅룸</h2>
+        <p class="text-xs text-slate-500 mt-1">내 사진(또는 샘플)에 넥라인을 겹쳐 보고, 내 얼굴형을 직접 관찰해서 골라 보세요.</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        <div class="lg:col-span-6 bg-white rounded-3xl border border-slate-200 p-5">
+          <div class="relative w-full aspect-square max-w-[420px] mx-auto rounded-2xl overflow-hidden bg-slate-900 flex items-center justify-center">
+            <div id="screen-placeholder" class="text-center p-6 text-slate-400 flex flex-col items-center">
+              <i class="fa-regular fa-image text-3xl mb-2"></i>
+              <p class="text-xs font-bold text-slate-300">정면 사진을 올리거나 샘플을 눌러 보세요</p>
+              <p class="text-[11px] text-slate-500 mt-1">턱 끝이 점선 타원 아래쪽에 오도록!</p>
+            </div>
+            <video id="webcam-video" autoplay playsinline muted class="hidden w-full h-full object-cover" style="transform:scaleX(-1)"></video>
+            <img id="preview-image" alt="내 사진" class="hidden w-full h-full object-cover">
+            <svg id="neckline-svg" class="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 400 400"></svg>
+            <div id="guide-overlay" class="absolute inset-0 pointer-events-none hidden items-start justify-center pt-[4%]">
+              <div class="w-[50%] h-[62%] border-2 border-dashed border-sky-400/70 rounded-[50%]"></div>
+            </div>
+            <div id="countdown-overlay" class="absolute inset-0 bg-slate-900/70 flex items-center justify-center hidden">
+              <span id="countdown-number" class="text-white font-black text-7xl">3</span>
+            </div>
+          </div>
+
+          <input type="file" id="image-file-input" accept="image/*" class="hidden">
+          <div class="mt-4 grid grid-cols-3 gap-2 no-print">
+            <button id="upload-btn" class="py-2.5 bg-slate-100 hover:bg-slate-200 rounded-xl text-xs font-bold"><i class="fa-solid fa-folder-open text-sky-500 mr-1"></i>사진 올리기</button>
+            <button id="cam-btn" class="py-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-bold"><i class="fa-solid fa-video mr-1"></i>카메라</button>
+            <button id="sample-btn" class="py-2.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-xs font-bold"><i class="fa-solid fa-user mr-1"></i>샘플</button>
+          </div>
+          <button id="take-photo-btn" class="hidden w-full mt-2 py-2.5 bg-sky-500 hover:bg-sky-600 text-white rounded-xl text-xs font-bold"><i class="fa-solid fa-camera mr-1"></i>3초 뒤 촬영</button>
+
+          <p class="text-[11px] font-bold text-slate-500 mt-4 mb-2">넥라인 겹쳐 보기</p>
+          <div id="fit-neck-grid" class="grid grid-cols-3 sm:grid-cols-4 gap-1.5"></div>
+          <div id="fit-comment" class="mt-3 p-3 bg-slate-50 border border-slate-200 rounded-xl text-[11px] text-slate-600 leading-relaxed"></div>
+          <div class="mt-3 bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-[11px] text-emerald-800 flex gap-2">
+            <i class="fa-solid fa-shield-halved mt-0.5"></i>
+            <span><strong>개인정보 안심:</strong> 내 사진은 어디로도 전송·저장되지 않고 이 화면 안에서만 보여요.</span>
+          </div>
+        </div>
+
+        <div class="lg:col-span-6 space-y-4">
+          <div class="bg-white rounded-3xl border border-slate-200 p-5">
+            <p class="text-xs font-black text-slate-800 mb-1">1단계. 거울이나 사진을 보며 관찰하기</p>
+            <ul class="text-[11px] text-slate-600 space-y-1 mb-3 list-disc pl-4">
+              <li>얼굴 <strong>가로 폭</strong>과 <strong>세로 길이</strong> 중 어느 쪽이 더 길게 느껴지나요?</li>
+              <li>가장 넓은 곳은 <strong>이마 · 광대 · 턱</strong> 중 어디인가요?</li>
+              <li>턱 끝은 <strong>둥근가요, 각졌나요, 뾰족한가요?</strong></li>
+            </ul>
+            <p class="text-xs font-black text-slate-800 mb-2">2단계. 내 얼굴형과 가장 가까운 것 고르기</p>
+            <div id="fit-face-grid" class="grid grid-cols-5 gap-1.5"></div>
+          </div>
+
+          <div id="fit-result" class="bg-white rounded-3xl border border-slate-200 p-5 hidden"></div>
+
+          <div class="bg-white rounded-3xl border border-slate-200 p-5">
+            <p class="text-xs font-black text-slate-800 mb-2">3단계. 나의 디자인 기록 ✍️</p>
+            <label class="text-[11px] text-slate-500">겹쳐 본 넥라인 중 내가 가장 마음에 든 것과 그 이유 (대비/반복이라는 말을 써 보세요)</label>
+            <textarea id="my-reason" rows="3" class="mt-1 w-full border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-200" placeholder="예) 나는 둥근 얼굴이라 V넥을 골랐다. 곡선과 직선이 대비되어 얼굴이 시원해 보였다."></textarea>
+            <button id="copy-report-btn" class="mt-2 w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold"><i class="fa-regular fa-copy mr-1"></i>활동지용 기록 복사하기</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 사진 출처 ========== -->
+    <section class="bg-white border border-slate-200 rounded-3xl p-5">
+      <details>
+        <summary class="cursor-pointer text-xs font-bold text-slate-600"><i class="fa-solid fa-camera-retro mr-1"></i> 사진 출처 및 저작권 (위키미디어 공용, 자유 이용 라이선스)</summary>
+        <p class="text-[11px] text-slate-500 mt-2">모든 사진은 위키미디어 공용(Wikimedia Commons)의 CC 라이선스 또는 퍼블릭 도메인 사진입니다. 수업 자료로 쓸 때도 아래처럼 출처를 밝혀 주세요.</p>
+        <ol id="credits-list" class="mt-2 text-[11px] text-slate-500 space-y-1 list-decimal pl-5"></ol>
+      </details>
+    </section>
+  </main>
+
+  <!-- Photo modal -->
+  <div id="photo-modal" class="fixed inset-0 bg-slate-900/70 z-50 hidden items-center justify-center p-3">
+    <div class="bg-white rounded-3xl max-w-3xl w-full max-h-[92vh] overflow-y-auto custom-scrollbar p-5">
+      <div class="flex items-start justify-between gap-3 mb-3">
+        <div>
+          <span id="pm-eng" class="text-[10px] font-bold bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full"></span>
+          <h3 id="pm-title" class="font-black text-xl text-slate-900 mt-1"></h3>
+        </div>
+        <button id="pm-close" class="w-8 h-8 rounded-full hover:bg-slate-100 text-slate-500"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <div id="pm-photo" class="photo-box rounded-2xl aspect-[4/5]"></div>
+          <p id="pm-credit" class="credit mt-1"></p>
+          <div id="pm-thumbs" class="flex gap-2 mt-2"></div>
+        </div>
+        <div class="space-y-3">
+          <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200 flex items-center gap-3">
+            <div id="pm-icon" class="w-24 flex-shrink-0"></div>
+            <div>
+              <p class="text-[10px] font-bold text-slate-400">선의 종류 · 시선 방향</p>
+              <p id="pm-line" class="text-sm font-black text-slate-800"></p>
+            </div>
+          </div>
+          <div>
+            <p class="text-[11px] font-bold text-sky-700 mb-0.5"><i class="fa-solid fa-eye mr-1"></i>착시 효과</p>
+            <p id="pm-effect" class="text-xs text-slate-700 leading-relaxed"></p>
+          </div>
+          <div>
+            <p class="text-[11px] font-bold text-emerald-700 mb-0.5"><i class="fa-solid fa-thumbs-up mr-1"></i>대비로 잘 어울리는 얼굴형</p>
+            <p id="pm-good" class="text-xs text-slate-700"></p>
+          </div>
+          <div>
+            <p class="text-[11px] font-bold text-rose-700 mb-0.5"><i class="fa-solid fa-repeat mr-1"></i>반복되어 강조되는 경우</p>
+            <p id="pm-care" class="text-xs text-slate-700"></p>
+          </div>
+          <div class="p-3 rounded-xl bg-purple-50 border border-purple-100">
+            <p class="text-[11px] font-bold text-purple-700 mb-0.5"><i class="fa-solid fa-school mr-1"></i>교복·사복 연출 팁</p>
+            <p id="pm-tip" class="text-xs text-slate-700 leading-relaxed"></p>
+          </div>
+          <div class="p-3 rounded-xl bg-amber-50 border border-amber-200">
+            <p class="text-[11px] font-bold text-amber-800 mb-0.5">✏️ 관찰 질문</p>
+            <p id="pm-q" class="text-xs text-amber-900 leading-relaxed"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="fixed bottom-6 right-6 z-50 bg-slate-900 text-white px-4 py-2.5 rounded-xl text-xs font-semibold shadow-xl flex items-center gap-2 translate-y-24 opacity-0 transition-all duration-300 pointer-events-none">
+    <i class="fa-solid fa-circle-check text-emerald-400"></i><span id="toast-message"></span>
+  </div>
+
+  <script>
+    /* 위키미디어 공용 사진 (자동 생성된 출처 정보 포함) */
+    const PHOTOS = {
+ "v1": {
+  "src": "img/v1.jpg",
+  "license": "CC BY 2.0",
+  "artist": "Spreadshirt",
+  "page": "https://commons.wikimedia.org/wiki/File:Woman_in_a_V-Neck_T-Shirt.jpg"
+ },
+ "v2": {
+  "src": "img/v2.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Graemeh319",
+  "page": "https://commons.wikimedia.org/wiki/File:HeadshotPinkSweaterNOV20.jpg"
+ },
+ "v3": {
+  "src": "img/v3.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Explicit",
+  "page": "https://commons.wikimedia.org/wiki/File:181124_%EC%9D%B4%EC%8B%9C%EC%96%B8_AK%ED%94%8C%EB%9D%BC%EC%9E%90_%EB%B6%84%EB%8B%B9%EC%A0%90_%ED%8C%AC%EC%8B%B8%EC%9D%B8%ED%9A%8C_5.jpg"
+ },
+ "r1": {
+  "src": "img/r1.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "André Verly",
+  "page": "https://commons.wikimedia.org/wiki/File:Cantor_e_Compositor_Andr%C3%A9_Verly.jpg"
+ },
+ "r2": {
+  "src": "img/r2.jpg",
+  "license": "CC0",
+  "artist": "Matt Southy",
+  "page": "https://commons.wikimedia.org/wiki/File:Portrait_of_a_smiling_person_with_reddish-brown_hair,_2026.jpg"
+ },
+ "r3": {
+  "src": "img/r3.jpg",
+  "license": "CC BY 4.0",
+  "artist": "B.A.P JONGUP's get UP",
+  "page": "https://commons.wikimedia.org/wiki/File:160821_%EB%B6%80%EC%82%B0_%ED%8C%AC%EC%8B%B8%EC%9D%B8%ED%9A%8C_%EC%A2%85%EC%97%85_01.jpg"
+ },
+ "h1": {
+  "src": "img/h1.jpg",
+  "license": "CC BY 4.0",
+  "artist": "포에버 (Forever5)",
+  "page": "https://commons.wikimedia.org/wiki/File:(15.03.01)_%EC%B9%A0%ED%95%99%EB%85%84%EC%9D%BC%EB%B0%98_%EC%B6%9C%EB%B0%9C%EB%93%9C%EB%A6%BC%ED%8C%80_%EC%A7%81%EC%B0%8D_by_%ED%8F%AC%EC%97%90%EB%B2%84_(4).jpg"
+ },
+ "h2": {
+  "src": "img/h2.jpg",
+  "license": "CC BY-SA 2.0",
+  "artist": "Hoodype",
+  "page": "https://commons.wikimedia.org/wiki/File:Blue_graphic_hoodie_(52774355054).jpg"
+ },
+ "h3": {
+  "src": "img/h3.jpg",
+  "license": "CC0",
+  "artist": "Charly Race crace",
+  "page": "https://commons.wikimedia.org/wiki/File:Charly_Race_2016_(Unsplash).jpg"
+ },
+ "h4": {
+  "src": "img/h4.png",
+  "license": "CC BY-SA 2.0",
+  "artist": "Dennis van Zuijlekom",
+  "page": "https://commons.wikimedia.org/wiki/File:RFguy.png"
+ },
+ "c1": {
+  "src": "img/c1.jpg",
+  "license": "CC BY-SA 2.0",
+  "artist": "aiaraldea.com",
+  "page": "https://commons.wikimedia.org/wiki/File:2015_Urdu%C3%B1a_Otxomaioak_txupinazoa_-_16799175883.jpg"
+ },
+ "p1": {
+  "src": "img/p1.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Explicit",
+  "page": "https://commons.wikimedia.org/wiki/File:230611_FC_%EC%84%9C%EC%9A%B8_vs_%ED%8F%AC%ED%95%AD_%EC%8A%A4%ED%8B%B8%EB%9F%AC%EC%8A%A4_(%EA%B9%80%EA%B2%BD%EB%AF%BC).jpg"
+ },
+ "p2": {
+  "src": "img/p2.jpg",
+  "license": "CC BY 3.0",
+  "artist": "FC안양_FCANYANG",
+  "page": "https://commons.wikimedia.org/wiki/File:190623_%EC%A0%84%EB%82%A8%EA%B3%BC%EC%9D%98_%EA%B2%BD%EA%B8%B0_%ED%9B%84_%EA%B5%AC%EB%B3%B8%EC%83%81%EA%B3%BC%EC%9D%98_%EC%9D%B8%ED%84%B0%EB%B7%B0.jpg"
+ },
+ "t1": {
+  "src": "img/t1.jpg",
+  "license": "CC BY 3.0",
+  "artist": "Marie Claire Korea",
+  "page": "https://commons.wikimedia.org/wiki/File:(Marie_Claire_Korea)_One_Fine_Day_-_%EC%9C%A4%EC%95%84_(1).jpg"
+ },
+ "t2": {
+  "src": "img/t2.png",
+  "license": "Public domain",
+  "artist": "Pearson Scott Foresman",
+  "page": "https://commons.wikimedia.org/wiki/File:Akimbo-photo_(PSF).png"
+ },
+ "t3": {
+  "src": "img/t3.jpg",
+  "license": "CC BY-SA 2.0",
+  "artist": "János Korom Dr. >17 Million views from Wien, Austria",
+  "page": "https://commons.wikimedia.org/wiki/File:2007_10_04_OWS_075_(51128937011).jpg"
+ },
+ "b1": {
+  "src": "img/b1.jpg",
+  "license": "Public domain",
+  "artist": "SCANPIX",
+  "page": "https://commons.wikimedia.org/wiki/File:Princesses_Margaretha,_D%C3%A9sir%C3%A9e_and_Birgitta_1958.jpg"
+ },
+ "b2": {
+  "src": "img/b2.png",
+  "license": "CC BY 3.0",
+  "artist": "Looking Glass Films",
+  "page": "https://commons.wikimedia.org/wiki/File:Anne_Hathaway_for_AHC_(cropped).png"
+ },
+ "o1": {
+  "src": "img/o1.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Ministry of culture, sports and Tourism- Lee Jeong-woo",
+  "page": "https://commons.wikimedia.org/wiki/File:Anne_Hathaway-_Press_conference_for_the_film_%22The_Devil_Wears_Prada_2%22_-_55194764955.jpg"
+ },
+ "s1": {
+  "src": "img/s1.jpg",
+  "license": "CC BY 3.0",
+  "artist": "Marie Claire Korea",
+  "page": "https://commons.wikimedia.org/wiki/File:Kim_Hyang-gi_para_Marie_Claire_Korea_-%EB%A7%88%EB%A6%AC25%EC%A3%BC%EB%85%84_%EC%8A%A4%ED%83%80%EB%93%A4%EC%9D%98_%EC%B6%95%ED%95%98_%EB%A6%B4%EB%A0%88%EC%9D%B4_-_%EA%B9%80%ED%96%A5%EA%B8%B0_03.jpg"
+ },
+ "u1": {
+  "src": "img/u1.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Manfred Werner - Tsui",
+  "page": "https://commons.wikimedia.org/wiki/File:Boulder_Worldcup_Vienna_28-05-2010_quali-w076_Tabea_Schwab.jpg"
+ },
+ "u2": {
+  "src": "img/u2.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Manfred Werner - Tsui",
+  "page": "https://commons.wikimedia.org/wiki/File:Boulder_Worldcup_Vienna_28-05-2010_quali-w108_Szilvia_Varga.jpg"
+ }
+};
+
+    /* 사진별 얼굴·넥라인이 잘 보이도록 하는 위치 보정 */
+    const PHOTO_POS = { v1: 'center 10%', r1: 'center 30%', b1: '30% 15%', b2: 'center 30%', o1: 'center 25%', t2: 'center 10%', t3: 'center 15%', h2: 'center 20%', u1: 'center 25%', u2: 'center 15%', s1: 'center 45%' };
+
+    const NECKLINES = {
+      vneck: {
+        name: 'V넥', eng: 'V-Neck', photos: ['v1', 'v2', 'v3'],
+        line: '사선 직선 · 세로 ↓',
+        effect: '목 아래로 뾰족하게 파인 V자 선이 시선을 아래로 끌어내려요. 얼굴과 목이 세로로 길고 갸름해 보이는 착시가 생겨요.',
+        good: '둥근형, 각진형 (곡선·넓은 폭과 대비)', care: '긴 얼굴형은 세로 길이가 더 강조될 수 있어요. 깊이가 얕은 V넥을 고르면 괜찮아요.',
+        tip: '교복 셔츠 위에 V넥 니트 조끼나 카디건을 입으면 자연스럽게 V존이 생겨요.',
+        q: '사진 속 V자 끝이 얼마나 깊은지 보세요. 더 깊으면 얼굴이 어떻게 보일까요?'
+      },
+      round: {
+        name: '라운드넥 (크루넥)', eng: 'Round / Crew Neck', photos: ['r1', 'r2', 'r3'],
+        line: '부드러운 곡선 · 감싸기 ◡',
+        effect: '목둘레를 따라 둥글게 감싸는 곡선이라 인상이 부드럽고 편안해 보여요. 가장 기본이 되는 티셔츠·맨투맨 넥라인이에요.',
+        good: '각진형, 긴 얼굴형, 하트형 (직선·뾰족함과 대비)', care: '둥근 얼굴형은 둥근 선이 반복되어 얼굴이 더 둥글어 보일 수 있어요.',
+        tip: '맨투맨은 목이 꽉 조이는 것보다 살짝 여유 있는 넥을 고르면 목선이 더 편안해 보여요.',
+        q: '티셔츠 목둘레의 곡선과 사진 속 사람의 턱선 모양을 비교해 보세요. 비슷한가요, 다른가요?'
+      },
+      uneck: {
+        name: 'U넥 (스쿱넥)', eng: 'U-Neck / Scoop Neck', photos: ['u1', 'u2'],
+        line: '깊은 곡선 · 세로 + 부드러움',
+        effect: '라운드넥보다 더 깊고 넓게 파인 U자 곡선이에요. 부드러운 느낌은 그대로 두고 세로로 시원한 느낌을 더해 줘요.',
+        good: '각진형, 하트형', care: '아주 깊으면 목이 길어 보여서 긴 얼굴형은 길이감이 강조될 수 있어요.',
+        tip: '민소매·운동복에서 자주 보여요. 위에 셔츠를 걸치면 U자 선이 레이어드되어 멋스러워요.',
+        q: 'U넥과 라운드넥 사진을 나란히 두고 보세요. 어느 쪽이 목이 더 길어 보이나요?'
+      },
+      turtle: {
+        name: '터틀넥 (목폴라)', eng: 'Turtleneck', photos: ['t1', 't2', 't3'],
+        line: '목을 덮는 수직 기둥 · 시선 위로 ↑',
+        effect: '목을 완전히 덮어 얼굴 아래를 ‘액자’처럼 받쳐 줘요. 시선이 얼굴로 모이고, 얼굴~몸 사이의 길이가 짧아 보여요.',
+        good: '긴 얼굴형, 하트형 (세로 길이를 줄이고 턱 아래를 채움)', care: '둥근형·목이 짧은 경우 답답해 보일 수 있어요. 목 부분이 낮은 하이넥을 추천!',
+        tip: '겨울에 교복 셔츠 안이나 카디건 안에 받쳐 입으면 단정하고 따뜻해 보여요.',
+        q: '터틀넥 사진에서 눈이 가장 먼저 가는 곳은 어디인가요? 왜 그럴까요?'
+      },
+      hoodie: {
+        name: '후드티', eng: 'Hoodie', photos: ['h2', 'h1', 'h3', 'h4'],
+        line: '두꺼운 볼륨 · 목 주변 채우기',
+        effect: '모자(후드) 원단이 목 뒤와 옆을 두껍게 채워서 얼굴 아래 여백이 줄어들어요. 지퍼형은 열면 V존이 생겨요.',
+        good: '긴 얼굴형(풀오버), 둥근형·각진형(지퍼를 연 집업)', care: '목이 짧거나 얼굴이 둥글면 풀오버 후드가 얼굴을 더 커 보이게 할 수 있어요.',
+        tip: '집업 후드는 지퍼를 쇄골까지 내려 V존을 만들면 시원해 보여요. 사진 4번(집업)과 1번(풀오버)을 비교해 보세요!',
+        q: '모자를 쓴 사진(3번)과 벗은 사진(1번)에서 얼굴의 크기와 모양은 어떻게 다르게 느껴지나요?'
+      },
+      collar: {
+        name: '셔츠 칼라 · 폴로 칼라', eng: 'Shirt / Polo Collar', photos: ['c1', 'p1', 'p2'],
+        line: '사선 깃 + 단추 · 단정한 V존',
+        effect: '깃의 비스듬한 선이 얼굴을 양쪽에서 받쳐 주고, 단추를 풀수록 V존이 깊어져요. 교복 셔츠와 폴로티가 대표적이에요.',
+        good: '하트형(깃이 턱 아래를 받침), 둥근형(단추를 1개 풀어 V존 만들기)', care: '단추를 끝까지 잠그면 목 부분이 막혀서 둥근형은 얼굴이 꽉 차 보일 수 있어요.',
+        tip: '교복 셔츠 윗단추를 1개 풀기 vs 다 잠그기 — 거울로 직접 비교해 보세요.',
+        q: '셔츠 사진(1번)과 폴로티 사진(2·3번)의 깃 모양과 V존 깊이를 비교해 보세요.'
+      },
+      boat: {
+        name: '보트넥', eng: 'Boat Neck (Bateau)', photos: ['b1'],
+        line: '얕고 넓은 가로선 · 양옆으로 ↔',
+        effect: '쇄골을 따라 양쪽 어깨 쪽으로 길게 뻗은 가로선이에요. 시선을 옆으로 넓혀서 얼굴이 덜 길어 보이고 어깨가 넓어 보여요.',
+        good: '긴 얼굴형, 하트형(넓은 이마와 균형)', care: '둥근형·어깨가 넓은 경우 가로 폭이 더 강조될 수 있어요.',
+        tip: '줄무늬(스트라이프) 보트넥 티셔츠는 가로선이 한 번 더 반복되어 가로 효과가 커져요.',
+        q: '보트넥의 선이 끝나는 위치(어깨 끝)를 찾아보세요. 시선이 어디로 흘러가나요?'
+      },
+      offshoulder: {
+        name: '오프숄더', eng: 'Off-the-Shoulder', photos: ['b2', 'o1'],
+        line: '어깨 아래 가로선 · 양옆으로 ↔↔',
+        effect: '어깨를 드러내고 그 아래로 가로선이 지나가요. 보트넥보다 가로 효과가 훨씬 크고, 목과 쇄골이 길어 보여요.',
+        good: '긴 얼굴형, 하트형', care: '어깨가 넓으면 가로 폭이 강조돼요. 행사·무대 의상에 주로 쓰여요.',
+        tip: '일상에서는 위에 카디건을 걸치거나 보트넥으로 대신하면 비슷한 가로 효과를 얻을 수 있어요.',
+        q: '보트넥 사진과 비교했을 때 가로선의 위치가 어떻게 다른가요?'
+      },
+      square: {
+        name: '스퀘어넥', eng: 'Square Neck', photos: ['s1'],
+        line: '가로 + 세로 직선 · 네모 틀 ▭',
+        effect: '네모난 직선 틀이 얼굴 아래를 안정적으로 받쳐 줘요. 단정하고 클래식한 느낌이 나요.',
+        good: '하트형(뾰족한 턱 아래 받침), 둥근형(곡선과 직선 대비)', care: '각진 얼굴형은 직선과 각이 반복되어 턱선이 더 또렷해 보여요.',
+        tip: '블라우스·원피스에서 많이 보여요. 네모 틀의 가로 폭이 넓을수록 가로 효과가 커져요.',
+        q: '네모 틀의 가로선과 세로선 중 어떤 선이 더 눈에 띄나요?'
+      }
+    };
+
+    const FACES = {
+      round:  { name: '둥근형', ratio: '가로 ≈ 세로', desc: '볼과 광대가 가장 넓고 턱선이 부드러운 곡선이에요.', charm: '친근하고 다정한 첫인상이 가장 큰 매력!',
+                best: ['vneck', 'collar', 'square'], care: ['round', 'turtle'],
+                svg: '<ellipse cx="50" cy="52" rx="34" ry="36" />' },
+      square: { name: '각진형', ratio: '가로 ≈ 세로, 턱이 넓음', desc: '이마와 턱의 폭이 비슷하고 턱선이 또렷하게 각져 있어요.', charm: '당당하고 믿음직한 분위기가 가장 큰 매력!',
+                best: ['round', 'uneck', 'vneck'], care: ['square', 'boat'],
+                svg: '<path d="M20 22 Q20 14 30 14 L70 14 Q80 14 80 22 L80 66 Q80 84 64 88 L36 88 Q20 84 20 66 Z" />' },
+      long:   { name: '긴형', ratio: '세로가 훨씬 김', desc: '이마부터 턱까지 폭이 비슷하고 세로 길이가 길어요.', charm: '성숙하고 지적인 분위기가 가장 큰 매력!',
+                best: ['boat', 'turtle', 'hoodie'], care: ['vneck', 'uneck'],
+                svg: '<path d="M26 22 Q26 8 50 8 Q74 8 74 22 L74 72 Q74 94 50 94 Q26 94 26 72 Z" />' },
+      heart:  { name: '하트형', ratio: '이마 넓고 턱 뾰족', desc: '이마·광대가 넓고 턱 끝으로 갈수록 좁고 뾰족해져요.', charm: '톡톡 튀고 생기 있는 분위기가 가장 큰 매력!',
+                best: ['square', 'boat', 'collar'], care: ['vneck'],
+                svg: '<path d="M16 34 Q16 12 50 12 Q84 12 84 34 Q84 58 62 80 Q54 90 50 90 Q46 90 38 80 Q16 58 16 34 Z" />' },
+      oval:   { name: '계란형', ratio: '세로가 조금 김', desc: '광대가 가장 넓고 이마와 턱이 비슷하게 부드러워요.', charm: '어떤 선과도 잘 어울리는 균형 잡힌 비율이 매력!',
+                best: ['vneck', 'round', 'boat'], care: [],
+                svg: '<ellipse cx="50" cy="52" rx="30" ry="40" />' }
+    };
+
+    /* 선 그림(아이콘) */
+    function neckIcon(key, cls = 'w-full') {
+      const skin = '#fcd9b6', shirt = '#94a3b8', line = '#4f46e5', arrow = '#f43f5e';
+      const body = 'M8 100 L8 62 Q12 42 40 34 L80 34 Q108 42 112 62 L112 100 Z';
+      const head = `<ellipse cx="60" cy="-4" rx="26" ry="18" fill="${skin}"/><rect x="48" y="6" width="24" height="34" rx="6" fill="${skin}"/>`;
+      const A = (x1, y1, x2, y2) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${arrow}" stroke-width="2.5" marker-end="url(#ah-${key})"/>`;
+      const defs = `<defs><marker id="ah-${key}" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="${arrow}"/></marker></defs>`;
+      let g = '';
+      switch (key) {
+        case 'vneck': g = `${head}<path d="${body}" fill="${shirt}"/><path d="M42 34 L60 74 L78 34 Z" fill="${skin}"/><path d="M42 34 L60 74 L78 34" stroke="${line}" stroke-width="3" fill="none" stroke-linejoin="round"/>${A(60, 50, 60, 94)}`; break;
+        case 'round': g = `${head}<path d="${body}" fill="${shirt}"/><path d="M44 34 Q60 52 76 34 Z" fill="${skin}"/><path d="M44 34 Q60 52 76 34" stroke="${line}" stroke-width="3" fill="none"/><path d="M34 64 Q60 84 86 64" stroke="${arrow}" stroke-width="2.5" fill="none" marker-end="url(#ah-${key})"/>`; break;
+        case 'uneck': g = `${head}<path d="${body}" fill="${shirt}"/><path d="M42 34 C42 84 78 84 78 34 Z" fill="${skin}"/><path d="M42 34 C42 84 78 84 78 34" stroke="${line}" stroke-width="3" fill="none"/>${A(60, 82, 60, 98)}`; break;
+        case 'turtle': g = `${head}<path d="${body}" fill="${shirt}"/><rect x="45" y="12" width="30" height="26" rx="5" fill="#64748b"/><path d="M50 15 L50 36 M55 15 L55 36 M60 15 L60 36 M65 15 L65 36 M70 15 L70 36" stroke="#475569" stroke-width="1.5"/><rect x="45" y="12" width="30" height="26" rx="5" stroke="${line}" stroke-width="3" fill="none"/>${A(60, 70, 60, 46)}`; break;
+        case 'hoodie': g = `${head}<path d="M22 48 Q18 16 46 20 L74 20 Q102 16 98 48 Q60 30 22 48 Z" fill="#64748b"/><path d="${body}" fill="${shirt}"/><path d="M44 34 Q60 50 76 34 Z" fill="${skin}"/><path d="M22 48 Q18 16 46 20 M98 48 Q102 16 74 20 M44 34 Q60 50 76 34" stroke="${line}" stroke-width="3" fill="none"/><path d="M54 46 L53 74 M66 46 L67 74" stroke="#f8fafc" stroke-width="2"/>`; break;
+        case 'collar': g = `${head}<path d="${body}" fill="${shirt}"/><path d="M48 34 L60 62 L72 34 Z" fill="${skin}"/><path d="M46 30 L60 48 L52 58 L38 38 Z M74 30 L60 48 L68 58 L82 38 Z" fill="#f8fafc" stroke="${line}" stroke-width="2.5" stroke-linejoin="round"/><circle cx="60" cy="72" r="2" fill="#f8fafc"/><circle cx="60" cy="86" r="2" fill="#f8fafc"/>`; break;
+        case 'boat': g = `${head}<path d="${body}" fill="${shirt}"/><path d="M26 40 Q60 52 94 40 L80 34 L40 34 Z" fill="${skin}"/><path d="M26 40 Q60 52 94 40" stroke="${line}" stroke-width="3" fill="none"/>${A(48, 80, 12, 80)}${A(72, 80, 108, 80)}`; break;
+        case 'offshoulder': g = `${head}<path d="${body}" fill="${skin}"/><path d="M8 100 L8 64 Q60 76 112 64 L112 100 Z" fill="${shirt}"/><path d="M8 64 Q60 76 112 64" stroke="${line}" stroke-width="3" fill="none"/>${A(48, 90, 10, 90)}${A(72, 90, 110, 90)}`; break;
+        case 'square': g = `${head}<path d="${body}" fill="${shirt}"/><path d="M42 34 L42 66 L78 66 L78 34 Z" fill="${skin}"/><path d="M42 34 L42 66 L78 66 L78 34" stroke="${line}" stroke-width="3" fill="none" stroke-linejoin="round"/>${A(36, 84, 14, 84)}${A(84, 84, 106, 84)}`; break;
+      }
+      return `<svg viewBox="0 -20 120 120" class="${cls}" aria-hidden="true">${defs}${g}</svg>`;
+    }
+
+    /* 사진 상자 + 출처 */
+    function photoHTML(id, cls = '') {
+      const p = PHOTOS[id];
+      const pos = PHOTO_POS[id] || 'center 20%';
+      return `<div class="photo-box ${cls}"><img src="${p.src}" alt="넥라인 예시 사진" loading="lazy" referrerpolicy="no-referrer" style="object-position:${pos}" onerror="this.parentElement.classList.add('failed')"><div class="fallback">사진을 불러오지 못했어요.<br>인터넷 연결을 확인해 주세요.</div></div>`;
+    }
+    function creditHTML(id) {
+      const p = PHOTOS[id];
+      return `사진: ${escapeHTML(p.artist)} · <a href="${p.page}" target="_blank" rel="noopener">${p.license}</a> · Wikimedia Commons`;
+    }
+    function escapeHTML(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      document.getElementById('toast-message').textContent = msg;
+      t.classList.remove('translate-y-24', 'opacity-0');
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(() => t.classList.add('translate-y-24', 'opacity-0'), 2400);
+    }
+
+    /* ---------- 탭 ---------- */
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.addEventListener('click', () => openTab(btn.dataset.tab)));
+    function openTab(name) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('hidden', p.id !== 'tab-' + name));
+      if (name !== 'fitting') stopCamera();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /* ---------- ① 원리 ---------- */
+    const PRINCIPLES = [
+      { key: 'vneck', photo: 'v1', title: '세로선 ↓', color: 'sky', text: 'V넥처럼 아래로 내려가는 선은 시선을 위아래로 움직여 <strong>길고 갸름하게</strong> 보이게 해요.' },
+      { key: 'boat', photo: 'b1', title: '가로선 ↔', color: 'pink', text: '보트넥처럼 옆으로 뻗은 선은 시선을 양옆으로 움직여 <strong>넓고 짧게</strong> 보이게 해요.' },
+      { key: 'round', photo: 'r2', title: '곡선 ◡', color: 'emerald', text: '라운드넥처럼 둥근 선은 <strong>부드럽고 편안한</strong> 인상을 줘요.' },
+      { key: 'square', photo: 's1', title: '직선·각 ▭', color: 'purple', text: '스퀘어넥처럼 꺾인 직선은 <strong>단정하고 또렷한</strong> 인상을 줘요.' }
+    ];
+    document.getElementById('principle-grid').innerHTML = PRINCIPLES.map(p => `
+      <button class="text-left bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-md transition" onclick="openNeck('${p.key}','${p.photo}')">
+        <div class="grid grid-cols-2">
+          ${photoHTML(p.photo, 'aspect-[3/4]')}
+          <div class="bg-slate-50 flex items-center justify-center p-2">${neckIcon(p.key, 'w-full')}</div>
+        </div>
+        <div class="p-3">
+          <p class="text-sm font-black text-${p.color}-700">${p.title} <span class="text-xs text-slate-500 font-bold">· ${NECKLINES[p.key].name}</span></p>
+          <p class="text-[11px] text-slate-600 mt-1 leading-snug">${p.text}</p>
+          <p class="credit mt-1.5">${creditHTML(p.photo).replace(/<a [^>]*>|<\/a>/g, '')}</p>
+        </div>
+      </button>`).join('');
+
+    /* ---------- ② 도감 ---------- */
+    document.getElementById('gallery-grid').innerHTML = Object.entries(NECKLINES).map(([key, n]) => `
+      <button class="text-left bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition" onclick="openNeck('${key}')">
+        <div class="relative">
+          ${photoHTML(n.photos[0], 'aspect-[4/3]')}
+          <div class="absolute bottom-2 right-2 w-16 bg-white/90 rounded-xl p-1 shadow">${neckIcon(key)}</div>
+          <span class="absolute top-2 left-2 text-[10px] font-bold bg-white/90 px-2 py-0.5 rounded-full">사진 ${n.photos.length}장</span>
+        </div>
+        <div class="p-3">
+          <p class="text-[10px] font-bold text-indigo-500">${n.eng}</p>
+          <p class="text-base font-black text-slate-900">${n.name}</p>
+          <p class="text-[11px] font-bold text-slate-500 mt-0.5">${n.line}</p>
+          <p class="text-[11px] text-slate-600 mt-1.5 leading-snug line-clamp-2">${n.effect}</p>
+        </div>
+      </button>`).join('');
+
+    /* 사진 모달 */
+    const modal = document.getElementById('photo-modal');
+    function openNeck(key, startPhoto) {
+      const n = NECKLINES[key];
+      const first = startPhoto || n.photos[0];
+      document.getElementById('pm-eng').textContent = n.eng;
+      document.getElementById('pm-title').textContent = n.name;
+      document.getElementById('pm-icon').innerHTML = neckIcon(key);
+      document.getElementById('pm-line').textContent = n.line;
+      document.getElementById('pm-effect').textContent = n.effect;
+      document.getElementById('pm-good').textContent = n.good;
+      document.getElementById('pm-care').textContent = n.care;
+      document.getElementById('pm-tip').textContent = n.tip;
+      document.getElementById('pm-q').textContent = n.q;
+      const thumbs = document.getElementById('pm-thumbs');
+      thumbs.innerHTML = n.photos.length > 1 ? n.photos.map((id, i) => `
+        <button data-id="${id}" class="pm-thumb w-14 rounded-lg overflow-hidden border-2 ${id === first ? 'border-indigo-500' : 'border-transparent'}">
+          ${photoHTML(id, 'aspect-square')}<span class="block text-[10px] font-bold text-center">${i + 1}번</span>
+        </button>`).join('') : '';
+      thumbs.querySelectorAll('.pm-thumb').forEach(b => b.addEventListener('click', () => {
+        thumbs.querySelectorAll('.pm-thumb').forEach(x => x.classList.replace('border-indigo-500', 'border-transparent'));
+        b.classList.replace('border-transparent', 'border-indigo-500');
+        setModalPhoto(b.dataset.id);
+      }));
+      setModalPhoto(first);
+      modal.classList.remove('hidden'); modal.classList.add('flex');
+    }
+    function setModalPhoto(id) {
+      document.getElementById('pm-photo').outerHTML = photoHTML(id, 'rounded-2xl aspect-[4/5]').replace('class="photo-box', 'id="pm-photo" class="photo-box');
+      document.getElementById('pm-credit').innerHTML = creditHTML(id);
+    }
+    function closeModal() { modal.classList.add('hidden'); modal.classList.remove('flex'); }
+    document.getElementById('pm-close').addEventListener('click', closeModal);
+    modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+    /* ---------- ③ 얼굴형 매칭 ---------- */
+    function faceSVG(key, cls) {
+      return `<svg viewBox="0 0 100 100" class="${cls}"><g fill="#fde68a" stroke="#d97706" stroke-width="3">${FACES[key].svg}</g><circle cx="40" cy="50" r="3" fill="#78350f"/><circle cx="60" cy="50" r="3" fill="#78350f"/><path d="M43 66 Q50 71 57 66" stroke="#78350f" stroke-width="2" fill="none" stroke-linecap="round"/></svg>`;
+    }
+    function faceButtons(containerId, onPick, small) {
+      const el = document.getElementById(containerId);
+      el.innerHTML = Object.entries(FACES).map(([k, f]) => `
+        <button data-face="${k}" class="face-card bg-white border-2 border-slate-200 rounded-2xl ${small ? 'p-1.5' : 'p-3'} flex flex-col items-center hover:border-indigo-300 transition">
+          ${faceSVG(k, small ? 'w-10 h-10' : 'w-14 h-14')}
+          <span class="${small ? 'text-[10px]' : 'text-xs'} font-black mt-1">${f.name}</span>
+          ${small ? '' : `<span class="text-[10px] text-slate-500">${f.ratio}</span>`}
+        </button>`).join('');
+      el.querySelectorAll('.face-card').forEach(b => b.addEventListener('click', () => {
+        el.querySelectorAll('.face-card').forEach(x => x.classList.toggle('active', x === b));
+        onPick(b.dataset.face);
+      }));
+    }
+    function neckMini(key, tone) {
+      const n = NECKLINES[key];
+      return `<button onclick="openNeck('${key}')" class="text-left rounded-xl border ${tone} overflow-hidden hover:shadow transition">
+        ${photoHTML(n.photos[0], 'aspect-square')}
+        <div class="p-2 flex items-center gap-1.5"><div class="w-8 flex-shrink-0">${neckIcon(key)}</div><span class="text-[11px] font-black leading-tight">${n.name}</span></div>
+      </button>`;
+    }
+    function renderFace(key) {
+      const f = FACES[key];
+      document.getElementById('face-detail').innerHTML = `
+        <div class="flex items-center gap-4 border-b border-slate-100 pb-3 mb-3">
+          ${faceSVG(key, 'w-16 h-16 flex-shrink-0')}
+          <div>
+            <h3 class="text-lg font-black text-slate-900">${f.name} <span class="text-xs text-slate-400 font-bold">${f.ratio}</span></h3>
+            <p class="text-xs text-slate-600">${f.desc}</p>
+            <p class="text-xs font-bold text-amber-700 mt-0.5">🌟 ${f.charm}</p>
+          </div>
+        </div>
+        <p class="text-xs font-black text-emerald-700 mb-2"><i class="fa-solid fa-scale-balanced mr-1"></i>대비 효과로 균형을 맞춰 주는 넥라인</p>
+        <div class="grid grid-cols-3 gap-2">${f.best.map(k => neckMini(k, 'border-emerald-200')).join('')}</div>
+        ${f.care.length ? `
+        <p class="text-xs font-black text-rose-700 mt-4 mb-2"><i class="fa-solid fa-repeat mr-1"></i>반복 효과로 특징이 더 강조되는 넥라인 <span class="font-normal text-slate-500">(개성을 살리고 싶을 때 선택!)</span></p>
+        <div class="grid grid-cols-3 gap-2">${f.care.map(k => neckMini(k, 'border-rose-200')).join('')}</div>` : `
+        <p class="text-xs text-slate-600 mt-4 p-3 bg-slate-50 rounded-xl">계란형은 특별히 주의할 넥라인이 없어요. 원하는 분위기에 따라 자유롭게 골라 보세요!</p>`}`;
+    }
+    faceButtons('face-grid', renderFace, false);
+    document.querySelector('#face-grid .face-card').click();
+
+    /* ---------- ④ 퀴즈 ---------- */
+    const CONFUSABLE = { boat: ['offshoulder'], offshoulder: ['boat'], round: ['uneck'], uneck: ['round'] };
+    let quiz = { items: [], i: 0, score: 0 };
+    function shuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+    function startQuiz() {
+      const pool = [];
+      Object.entries(NECKLINES).forEach(([k, n]) => n.photos.forEach(p => pool.push({ photo: p, answer: k })));
+      quiz = { items: shuffle(pool).slice(0, 10), i: 0, score: 0 };
+      renderQuiz();
+    }
+    function renderQuiz() {
+      const body = document.getElementById('quiz-body');
+      const prog = document.getElementById('quiz-progress');
+      if (quiz.i >= quiz.items.length) {
+        prog.textContent = '완료!';
+        const msg = quiz.score >= 9 ? '넥라인 박사! 🎓' : quiz.score >= 6 ? '훌륭해요! 👏' : '도감을 한 번 더 보고 도전해 봐요! 💪';
+        body.innerHTML = `<div class="text-center py-6">
+          <p class="text-5xl font-black text-indigo-600">${quiz.score} <span class="text-xl text-slate-400">/ ${quiz.items.length}</span></p>
+          <p class="text-sm font-bold mt-2">${msg}</p>
+          <button onclick="startQuiz()" class="mt-4 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold"><i class="fa-solid fa-rotate mr-1"></i>다시 풀기</button>
+        </div>`;
+        return;
+      }
+      const it = quiz.items[quiz.i];
+      prog.textContent = `${quiz.i + 1} / ${quiz.items.length} · 점수 ${quiz.score}`;
+      const banned = CONFUSABLE[it.answer] || [];
+      const wrong = shuffle(Object.keys(NECKLINES).filter(k => k !== it.answer && !banned.includes(k))).slice(0, 3);
+      const opts = shuffle([it.answer, ...wrong]);
+      body.innerHTML = `
+        ${photoHTML(it.photo, 'rounded-2xl aspect-[4/5] max-w-sm mx-auto')}
+        <p class="credit text-center mt-1">${creditHTML(it.photo)}</p>
+        <p class="text-xs text-slate-500 text-center mt-2">목 주변의 선 모양을 잘 살펴보세요!</p>
+        <div class="grid grid-cols-2 gap-2 mt-3">${opts.map(k => `<button data-k="${k}" class="quiz-opt border-2 border-slate-200 rounded-xl py-2.5 text-xs font-bold hover:bg-slate-50">${NECKLINES[k].name}</button>`).join('')}</div>
+        <div id="quiz-feedback" class="mt-3"></div>`;
+      body.querySelectorAll('.quiz-opt').forEach(b => b.addEventListener('click', () => {
+        if (body.dataset.locked === '1') return;
+        body.dataset.locked = '1';
+        const ok = b.dataset.k === it.answer;
+        if (ok) quiz.score++;
+        body.querySelectorAll('.quiz-opt').forEach(x => { if (x.dataset.k === it.answer) x.classList.add('correct'); });
+        if (!ok) b.classList.add('wrong');
+        const n = NECKLINES[it.answer];
+        document.getElementById('quiz-feedback').innerHTML = `
+          <div class="p-3 rounded-xl ${ok ? 'bg-emerald-50 border border-emerald-200' : 'bg-rose-50 border border-rose-200'} flex gap-3 items-center">
+            <div class="w-14 flex-shrink-0">${neckIcon(it.answer)}</div>
+            <p class="text-[11px] text-slate-700 leading-snug"><strong>${ok ? '정답!' : '아쉬워요!'} ${n.name}</strong> — ${n.line}<br>${n.effect}</p>
+          </div>
+          <button id="quiz-next" class="w-full mt-2 py-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-bold">다음 문제 →</button>`;
+        document.getElementById('quiz-next').addEventListener('click', () => { quiz.i++; body.dataset.locked = '0'; renderQuiz(); });
+      }));
+    }
+    startQuiz();
+
+    /* ---------- ⑤ 피팅룸 ---------- */
+    const OVERLAYS = {
+      vneck: `<path d="M 110 400 L 110 290 Q 150 300 170 292 L 200 372 L 230 292 Q 250 300 290 290 L 290 400 Z" fill="#0f172a" fill-opacity="0.85"/><path d="M 170 292 L 200 372 L 230 292" stroke="#38bdf8" stroke-width="4.5" fill="none" stroke-linejoin="round"/>`,
+      round: `<path d="M 100 400 L 100 290 Q 140 284 165 286 Q 200 320 235 286 Q 260 284 300 290 L 300 400 Z" fill="#0f172a" fill-opacity="0.85"/><path d="M 165 286 Q 200 320 235 286" stroke="#10b981" stroke-width="4.5" fill="none"/>`,
+      uneck: `<path d="M 100 400 L 100 290 L 160 286 C 160 378 240 378 240 286 L 300 290 L 300 400 Z" fill="#0f172a" fill-opacity="0.85"/><path d="M 160 286 C 160 378 240 378 240 286" stroke="#14b8a6" stroke-width="4.5" fill="none"/>`,
+      turtle: `<path d="M 100 400 L 100 300 Q 140 292 166 290 L 166 238 Q 200 246 234 238 L 234 290 Q 260 292 300 300 L 300 400 Z" fill="#0f172a" fill-opacity="0.9"/><path d="M 166 290 L 166 238 Q 200 246 234 238 L 234 290" stroke="#a855f7" stroke-width="4.5" fill="none"/><path d="M178 246 L178 290 M190 248 L190 292 M202 249 L202 292 M214 248 L214 292 M226 246 L226 290" stroke="#a855f7" stroke-width="1.5" opacity="0.6"/>`,
+      hoodie: `<path d="M 85 400 L 85 285 Q 110 240 160 262 Q 200 312 240 262 Q 290 240 315 285 L 315 400 Z" fill="#0f172a" fill-opacity="0.85"/><path d="M 95 288 Q 120 248 160 262 Q 200 312 240 262 Q 280 248 305 288" stroke="#f59e0b" stroke-width="4.5" fill="none"/><path d="M 186 302 L 184 372 M 214 302 L 216 372" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>`,
+      collar: `<path d="M 105 400 L 105 292 L 165 284 L 200 360 L 235 284 L 295 292 L 295 400 Z" fill="#0f172a" fill-opacity="0.85"/><polygon points="160,276 200,312 182,350 146,292" fill="#f8fafc" fill-opacity="0.9" stroke="#3b82f6" stroke-width="3"/><polygon points="240,276 200,312 218,350 254,292" fill="#f8fafc" fill-opacity="0.9" stroke="#3b82f6" stroke-width="3"/>`,
+      boat: `<path d="M 80 400 L 80 300 Q 200 326 320 300 L 320 400 Z" fill="#0f172a" fill-opacity="0.85"/><path d="M 80 300 Q 200 326 320 300" stroke="#ec4899" stroke-width="4.5" fill="none"/>`,
+      offshoulder: `<path d="M 60 400 L 60 336 Q 200 360 340 336 L 340 400 Z" fill="#0f172a" fill-opacity="0.85"/><path d="M 60 336 Q 200 360 340 336" stroke="#f43f5e" stroke-width="4.5" fill="none"/>`,
+      square: `<path d="M 105 400 L 105 290 L 152 288 L 152 352 L 248 352 L 248 288 L 295 290 L 295 400 Z" fill="#0f172a" fill-opacity="0.85"/><path d="M 152 288 L 152 352 L 248 352 L 248 288" stroke="#8b5cf6" stroke-width="4.5" fill="none" stroke-linejoin="round"/>`
+    };
+
+    const fit = { face: null, neck: 'vneck', hasImage: false, stream: null };
+    const necklineSvg = document.getElementById('neckline-svg');
+    const previewImage = document.getElementById('preview-image');
+    const webcamVideo = document.getElementById('webcam-video');
+    const placeholder = document.getElementById('screen-placeholder');
+    const guideOverlay = document.getElementById('guide-overlay');
+
+    document.getElementById('fit-neck-grid').innerHTML = Object.entries(NECKLINES).map(([k, n]) => `
+      <button data-neck="${k}" class="neck-chip border border-slate-200 bg-white rounded-xl p-1.5 flex flex-col items-center text-[10px] font-bold">
+        <div class="w-10">${neckIcon(k)}</div><span class="leading-tight text-center">${n.name.split(' ')[0]}</span>
+      </button>`).join('');
+    document.querySelectorAll('.neck-chip').forEach(b => b.addEventListener('click', () => selectFitNeck(b.dataset.neck)));
+
+    function selectFitNeck(k) {
+      fit.neck = k;
+      document.querySelectorAll('.neck-chip').forEach(b => b.classList.toggle('active', b.dataset.neck === k));
+      necklineSvg.innerHTML = (fit.hasImage || fit.stream) ? OVERLAYS[k] : '';
+      const n = NECKLINES[k];
+      let extra = '';
+      if (fit.face) {
+        const f = FACES[fit.face];
+        if (f.best.includes(k)) extra = `<br><span class="text-emerald-700 font-bold">✔ ${f.name}과(와) 대비되어 균형을 맞춰 주는 선이에요.</span>`;
+        else if (f.care.includes(k)) extra = `<br><span class="text-rose-700 font-bold">↻ ${f.name}의 특징이 반복되어 더 강조되는 선이에요.</span>`;
+      }
+      document.getElementById('fit-comment').innerHTML = `💡 <strong>${n.name}</strong> · ${n.line}<br>${n.effect}${extra}`;
+    }
+
+    faceButtons('fit-face-grid', key => {
+      fit.face = key;
+      const f = FACES[key];
+      const box = document.getElementById('fit-result');
+      box.classList.remove('hidden');
+      box.innerHTML = `
+        <div class="flex items-center gap-3 mb-3">${faceSVG(key, 'w-12 h-12')}
+          <div><p class="text-base font-black">${f.name}</p><p class="text-xs font-bold text-amber-700">🌟 ${f.charm}</p></div></div>
+        <p class="text-[11px] font-black text-emerald-700 mb-1.5">추천 넥라인 (눌러서 겹쳐 보기)</p>
+        <div class="flex flex-wrap gap-1.5">${f.best.map(k => `<button data-try="${k}" class="px-2.5 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200 text-[11px] font-bold text-emerald-800">👑 ${NECKLINES[k].name}</button>`).join('')}</div>
+        ${f.care.length ? `<p class="text-[11px] font-black text-rose-700 mt-3 mb-1.5">특징이 강조되는 넥라인</p>
+        <div class="flex flex-wrap gap-1.5">${f.care.map(k => `<button data-try="${k}" class="px-2.5 py-1.5 rounded-lg bg-rose-50 border border-rose-200 text-[11px] font-bold text-rose-800">↻ ${NECKLINES[k].name}</button>`).join('')}</div>` : ''}`;
+      box.querySelectorAll('[data-try]').forEach(b => b.addEventListener('click', () => selectFitNeck(b.dataset.try)));
+      selectFitNeck(f.best[0]);
+    }, true);
+
+    function showImage(src) {
+      stopCamera();
+      previewImage.src = src;
+      previewImage.classList.remove('hidden');
+      placeholder.classList.add('hidden');
+      guideOverlay.classList.remove('hidden'); guideOverlay.classList.add('flex');
+      fit.hasImage = true;
+      selectFitNeck(fit.neck);
+    }
+    const fileInput = document.getElementById('image-file-input');
+    document.getElementById('upload-btn').addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', e => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const r = new FileReader();
+      r.onload = ev => showImage(ev.target.result);
+      r.readAsDataURL(file);
+      fileInput.value = '';
+    });
+    document.getElementById('sample-btn').addEventListener('click', () => {
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+        <rect width="400" height="400" fill="#e0f2fe"/><circle cx="200" cy="140" r="104" fill="#334155"/>
+        <rect x="172" y="200" width="56" height="110" fill="#fcd9b6"/>
+        <path d="M 60 400 L 60 330 Q 80 296 172 288 L 228 288 Q 320 296 340 330 L 340 400 Z" fill="#fcd9b6"/>
+        <ellipse cx="200" cy="150" rx="70" ry="86" fill="#fde2c4" stroke="#e7a977" stroke-width="2"/>
+        <path d="M 128 120 Q 200 160 272 120 Q 200 70 128 120 Z" fill="#334155"/>
+        <ellipse cx="172" cy="150" rx="6" ry="8" fill="#1e293b"/><ellipse cx="228" cy="150" rx="6" ry="8" fill="#1e293b"/>
+        <path d="M 184 190 Q 200 202 216 190" stroke="#b45309" stroke-width="3" fill="none" stroke-linecap="round"/>
+      </svg>`;
+      showImage('data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg));
+      showToast('샘플 이미지를 불러왔어요.');
+    });
+
+    const camBtn = document.getElementById('cam-btn');
+    const takeBtn = document.getElementById('take-photo-btn');
+    camBtn.addEventListener('click', async () => {
+      if (fit.stream) { stopCamera(); return; }
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { showToast('이 환경에서는 카메라를 쓸 수 없어요. 사진 올리기를 이용해 주세요.'); return; }
+      try {
+        fit.stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 640 } }, audio: false });
+        webcamVideo.srcObject = fit.stream;
+        webcamVideo.classList.remove('hidden');
+        previewImage.classList.add('hidden'); placeholder.classList.add('hidden');
+        guideOverlay.classList.remove('hidden'); guideOverlay.classList.add('flex');
+        takeBtn.classList.remove('hidden');
+        camBtn.innerHTML = '<i class="fa-solid fa-video-slash mr-1"></i>카메라 끄기';
+        selectFitNeck(fit.neck);
+      } catch (err) { showToast('카메라 권한이 없어요. 사진 올리기를 이용해 주세요.'); }
+    });
+    function stopCamera() {
+      if (fit.stream) { fit.stream.getTracks().forEach(t => t.stop()); fit.stream = null; }
+      webcamVideo.classList.add('hidden');
+      takeBtn.classList.add('hidden');
+      camBtn.innerHTML = '<i class="fa-solid fa-video mr-1"></i>카메라';
+      if (!fit.hasImage) { placeholder.classList.remove('hidden'); guideOverlay.classList.add('hidden'); guideOverlay.classList.remove('flex'); necklineSvg.innerHTML = ''; }
+      else previewImage.classList.remove('hidden');
+    }
+    takeBtn.addEventListener('click', () => {
+      let count = 3;
+      const ov = document.getElementById('countdown-overlay'), num = document.getElementById('countdown-number');
+      num.textContent = count; ov.classList.remove('hidden');
+      const timer = setInterval(() => {
+        count--;
+        if (count > 0) { num.textContent = count; return; }
+        clearInterval(timer); ov.classList.add('hidden');
+        const c = document.createElement('canvas'); c.width = 400; c.height = 400;
+        const ctx = c.getContext('2d');
+        const vw = webcamVideo.videoWidth, vh = webcamVideo.videoHeight, s = Math.min(vw, vh);
+        ctx.translate(400, 0); ctx.scale(-1, 1);
+        ctx.drawImage(webcamVideo, (vw - s) / 2, (vh - s) / 2, s, s, 0, 0, 400, 400);
+        showImage(c.toDataURL('image/jpeg', 0.9));
+        showToast('촬영했어요! 넥라인을 바꿔 가며 비교해 보세요.');
+      }, 900);
+    });
+
+    document.getElementById('copy-report-btn').addEventListener('click', async () => {
+      const f = fit.face ? FACES[fit.face] : null;
+      const text = `[나의 넥라인 디자인 기록]
+• 내가 관찰한 얼굴형: ${f ? f.name : '(아직 고르지 않음)'}
+• 나의 매력: ${f ? f.charm : '-'}
+• 대비로 추천되는 넥라인: ${f ? f.best.map(k => NECKLINES[k].name).join(', ') : '-'}
+• 마지막으로 겹쳐 본 넥라인: ${NECKLINES[fit.neck].name} (${NECKLINES[fit.neck].line})
+• 내가 고른 넥라인과 이유: ${document.getElementById('my-reason').value.trim() || '(작성하지 않음)'}`;
+      try { await navigator.clipboard.writeText(text); showToast('기록이 복사되었어요! 활동지에 붙여 넣으세요.'); }
+      catch (e) {
+        const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); showToast('기록이 복사되었어요!'); } catch (_) { showToast('복사에 실패했어요.'); }
+        ta.remove();
+      }
+    });
+    selectFitNeck('vneck');
+
+    /* ---------- 출처 목록 ---------- */
+    document.getElementById('credits-list').innerHTML = Object.entries(NECKLINES).flatMap(([k, n]) =>
+      n.photos.map(id => `<li><strong>${n.name}</strong> — ${creditHTML(id)}</li>`)).join('');
+  </script>
+</body>
+</html>
